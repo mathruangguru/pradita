@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { ArrowLeft, ExternalLink, FileText } from "lucide-react";
+import {
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  ExternalLink,
+  FileText,
+} from "lucide-react";
 import { materiService } from "../../services/materiService";
 import { linksService } from "../../services/linksService";
 import { soalService } from "../../services/soalService";
 import SoalCard from "../../components/SoalCard";
+
+const SOAL_GROUP_SIZE = 10;
 
 const formatDate = (iso) =>
   iso
@@ -21,15 +31,30 @@ const MateriDetail = () => {
   const [materi, setMateri] = useState(undefined);
   const [links, setLinks] = useState([]);
   const [soal, setSoal] = useState([]);
+  const [activeSoalIndex, setActiveSoalIndex] = useState(0);
 
   useEffect(() => {
+    let ignore = false;
+
     materiService.get(id).then((row) => {
+      if (ignore) return;
+
       setMateri(row);
       if (row) {
-        linksService.listByMateriId(row.id).then(setLinks);
-        soalService.listByMateriId(row.id).then(setSoal);
+        linksService.listByMateriId(row.id).then((items) => {
+          if (!ignore) setLinks(items);
+        });
+        soalService.listByMateriId(row.id).then((items) => {
+          if (ignore) return;
+          setSoal(items);
+          setActiveSoalIndex(0);
+        });
       }
     });
+
+    return () => {
+      ignore = true;
+    };
   }, [id]);
 
   if (materi === undefined) {
@@ -50,6 +75,22 @@ const MateriDetail = () => {
       </div>
     );
   }
+
+  const activeGroupStart =
+    Math.floor(activeSoalIndex / SOAL_GROUP_SIZE) * SOAL_GROUP_SIZE;
+  const visibleSoal = soal.slice(
+    activeGroupStart,
+    activeGroupStart + SOAL_GROUP_SIZE,
+  );
+  const activeSoal = soal[activeSoalIndex];
+  const canMoveToPreviousGroup = activeGroupStart > 0;
+  const canMoveToPreviousSoal = activeSoalIndex > 0;
+  const canMoveToNextSoal = activeSoalIndex < soal.length - 1;
+  const canMoveToNextGroup = activeGroupStart + SOAL_GROUP_SIZE < soal.length;
+
+  const goToSoal = (index) => {
+    setActiveSoalIndex(Math.min(Math.max(index, 0), soal.length - 1));
+  };
 
   return (
     <article className="max-w-3xl">
@@ -125,9 +166,82 @@ const MateriDetail = () => {
           <h2 className="text-lg font-semibold text-slate-800">
             Latihan Soal
           </h2>
-          {soal.map((item) => (
-            <SoalCard key={item.id} soal={item} />
-          ))}
+          <nav
+            aria-label="Navigasi latihan soal"
+            className="flex items-center justify-between gap-3 overflow-x-auto rounded-2xl border border-slate-200 bg-white px-3 py-3 shadow-sm sm:px-4"
+          >
+            <div className="flex items-center gap-2">
+              {canMoveToPreviousGroup && (
+                <button
+                  type="button"
+                  onClick={() => goToSoal(activeGroupStart - SOAL_GROUP_SIZE)}
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
+                  aria-label="Ke 10 soal sebelumnya"
+                >
+                  <ChevronsLeft className="h-5 w-5" />
+                </button>
+              )}
+              {canMoveToPreviousSoal && (
+                <button
+                  type="button"
+                  onClick={() => goToSoal(activeSoalIndex - 1)}
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
+                  aria-label="Ke soal sebelumnya"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+              )}
+            </div>
+
+            <div className="flex min-w-max items-center justify-center gap-2">
+              {visibleSoal.map((item, index) => {
+                const soalIndex = activeGroupStart + index;
+                const isActive = soalIndex === activeSoalIndex;
+
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => goToSoal(soalIndex)}
+                    className={`h-11 w-11 shrink-0 rounded-xl text-base transition ${
+                      isActive
+                        ? "bg-slate-50 font-semibold text-slate-950 shadow-sm"
+                        : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                    }`}
+                    aria-current={isActive ? "page" : undefined}
+                    aria-label={`Ke soal nomor ${item.nomor}`}
+                  >
+                    {item.nomor}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex items-center gap-2">
+              {canMoveToNextSoal && (
+                <button
+                  type="button"
+                  onClick={() => goToSoal(activeSoalIndex + 1)}
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
+                  aria-label="Ke soal berikutnya"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              )}
+              {canMoveToNextGroup && (
+                <button
+                  type="button"
+                  onClick={() => goToSoal(activeGroupStart + SOAL_GROUP_SIZE)}
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
+                  aria-label="Ke 10 soal berikutnya"
+                >
+                  <ChevronsRight className="h-5 w-5" />
+                </button>
+              )}
+            </div>
+          </nav>
+
+          {activeSoal && <SoalCard key={activeSoal.id} soal={activeSoal} />}
         </div>
       )}
     </article>
