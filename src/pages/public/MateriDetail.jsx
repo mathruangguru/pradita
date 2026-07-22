@@ -178,33 +178,33 @@ const MateriDetail = () => {
             Latihan Soal
           </h2>
           <nav aria-label="Navigasi latihan soal">
-            <div className="flex items-center justify-between gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white px-2 py-3 shadow-sm sm:hidden">
-              <div className="flex items-center gap-1.5">
+            <div className="flex items-center justify-between gap-1 rounded-2xl border border-slate-200 bg-white px-2 py-3 shadow-sm sm:hidden">
+              <div className="flex items-center gap-1">
                 {canMoveToPreviousMobileGroup && (
                   <button
                     type="button"
                     onClick={() =>
                       goToSoal(activeMobileGroupStart - SOAL_MOBILE_GROUP_SIZE)
                     }
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
+                    className="flex h-9 w-7 shrink-0 items-center justify-center rounded-lg border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
                     aria-label="Ke 5 soal sebelumnya"
                   >
-                    <ChevronsLeft className="h-5 w-5" />
+                    <ChevronsLeft className="h-4 w-4" />
                   </button>
                 )}
                 {canMoveToPreviousSoal && (
                   <button
                     type="button"
                     onClick={() => goToSoal(activeSoalIndex - 1)}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
+                    className="flex h-9 w-7 shrink-0 items-center justify-center rounded-lg border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
                     aria-label="Ke soal sebelumnya"
                   >
-                    <ChevronLeft className="h-5 w-5" />
+                    <ChevronLeft className="h-4 w-4" />
                   </button>
                 )}
               </div>
 
-              <div className="flex min-w-max items-center justify-center gap-1.5">
+              <div className="flex min-w-0 items-center justify-center gap-1">
                 {visibleMobileSoal.map((item, index) => {
                   const soalIndex = activeMobileGroupStart + index;
                   const isActive = soalIndex === activeSoalIndex;
@@ -214,7 +214,7 @@ const MateriDetail = () => {
                       key={item.id}
                       type="button"
                       onClick={() => goToSoal(soalIndex)}
-                      className={`h-10 w-10 shrink-0 rounded-xl text-sm transition ${
+                      className={`h-9 w-7 shrink-0 rounded-lg text-xs transition ${
                         isActive
                           ? "bg-slate-50 font-semibold text-slate-950 shadow-sm"
                           : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
@@ -228,15 +228,15 @@ const MateriDetail = () => {
                 })}
               </div>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1">
                 {canMoveToNextSoal && (
                   <button
                     type="button"
                     onClick={() => goToSoal(activeSoalIndex + 1)}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
+                    className="flex h-9 w-7 shrink-0 items-center justify-center rounded-lg border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
                     aria-label="Ke soal berikutnya"
                   >
-                    <ChevronRight className="h-5 w-5" />
+                    <ChevronRight className="h-4 w-4" />
                   </button>
                 )}
                 {canMoveToNextMobileGroup && (
@@ -245,10 +245,10 @@ const MateriDetail = () => {
                     onClick={() =>
                       goToSoal(activeMobileGroupStart + SOAL_MOBILE_GROUP_SIZE)
                     }
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
+                    className="flex h-9 w-7 shrink-0 items-center justify-center rounded-lg border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
                     aria-label="Ke 5 soal berikutnya"
                   >
-                    <ChevronsRight className="h-5 w-5" />
+                    <ChevronsRight className="h-4 w-4" />
                   </button>
                 )}
               </div>
@@ -263,7 +263,7 @@ const MateriDetail = () => {
                     className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
                     aria-label="Ke 10 soal sebelumnya"
                   >
-                    <ChevronsLeft className="h-5 w-5" />
+                    <ChevronsLeft className="h-4 w-4" />
                   </button>
                 )}
                 {canMoveToPreviousSoal && (
@@ -273,7 +273,7 @@ const MateriDetail = () => {
                     className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
                     aria-label="Ke soal sebelumnya"
                   >
-                    <ChevronLeft className="h-5 w-5" />
+                    <ChevronLeft className="h-4 w-4" />
                   </button>
                 )}
               </div>
@@ -310,7 +310,7 @@ const MateriDetail = () => {
                     className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
                     aria-label="Ke soal berikutnya"
                   >
-                    <ChevronRight className="h-5 w-5" />
+                    <ChevronRight className="h-4 w-4" />
                   </button>
                 )}
                 {canMoveToNextGroup && (
@@ -320,7 +320,7 @@ const MateriDetail = () => {
                     className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800"
                     aria-label="Ke 10 soal berikutnya"
                   >
-                    <ChevronsRight className="h-5 w-5" />
+                    <ChevronsRight className="h-4 w-4" />
                   </button>
                 )}
               </div>
