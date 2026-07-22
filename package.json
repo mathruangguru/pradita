@@ -12,10 +12,15 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.110.8",
     "@tailwindcss/vite": "^4.3.3",
+    "katex": "^0.18.1",
     "lucide-react": "^1.25.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-helmet-async": "^3.0.0",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^7.18.1",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {

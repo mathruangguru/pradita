@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   BookOpen,
   Link2,
+  HelpCircle,
   Users,
   LogOut,
   Search,
@@ -16,6 +17,7 @@ const navItems = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/admin/materi", label: "Materi", icon: BookOpen },
   { to: "/admin/links", label: "Link Materi", icon: Link2 },
+  { to: "/admin/soal", label: "Soal", icon: HelpCircle },
   { to: "/admin/siswa", label: "Pengguna", icon: Users },
 ];
 

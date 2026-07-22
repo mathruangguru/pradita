@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { ArrowLeft, ExternalLink, FileText } from "lucide-react";
 import { materiService } from "../../services/materiService";
 import { linksService } from "../../services/linksService";
+import { soalService } from "../../services/soalService";
+import SoalCard from "../../components/SoalCard";
 
 const formatDate = (iso) =>
   iso
@@ -17,12 +20,14 @@ const MateriDetail = () => {
   const { id } = useParams();
   const [materi, setMateri] = useState(undefined);
   const [links, setLinks] = useState([]);
+  const [soal, setSoal] = useState([]);
 
   useEffect(() => {
     materiService.get(id).then((row) => {
       setMateri(row);
       if (row) {
         linksService.listByMateriId(row.id).then(setLinks);
+        soalService.listByMateriId(row.id).then(setSoal);
       }
     });
   }, [id]);
@@ -48,6 +53,10 @@ const MateriDetail = () => {
 
   return (
     <article className="max-w-3xl">
+      <Helmet>
+        <title>{`${materi.topik} | Bahan Ajar Pradita`}</title>
+      </Helmet>
+
       <Link
         to="/"
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-blue-900"
@@ -110,6 +119,17 @@ const MateriDetail = () => {
           </div>
         )}
       </div>
+
+      {soal.length > 0 && (
+        <div className="mt-6 space-y-4">
+          <h2 className="text-lg font-semibold text-slate-800">
+            Latihan Soal
+          </h2>
+          {soal.map((item) => (
+            <SoalCard key={item.id} soal={item} />
+          ))}
+        </div>
+      )}
     </article>
   );
 };

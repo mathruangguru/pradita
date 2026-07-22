@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { linksService } from "../../services/linksService";
 import { materiService } from "../../services/materiService";
 
@@ -61,6 +62,10 @@ const LinksForm = () => {
 
   return (
     <div className="max-w-xl">
+      <Helmet>
+        <title>{`${isEdit ? "Edit Link" : "Tambah Link"} | Admin Bahan Ajar Pradita`}</title>
+      </Helmet>
+
       <h1 className="text-2xl font-bold text-slate-900">
         {isEdit ? "Edit Link" : "Tambah Link"}
       </h1>

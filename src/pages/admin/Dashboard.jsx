@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { BookOpen, CheckCircle2, FileEdit, Users, FileText } from "lucide-react";
 import { materiService } from "../../services/materiService";
 import { siswaService } from "../../services/siswaService";
@@ -37,6 +38,10 @@ const Dashboard = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Dashboard | Admin Bahan Ajar Pradita</title>
+      </Helmet>
+
       <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
       <p className="mt-1 text-sm text-slate-500">
         Ringkasan bahan ajar dan pengguna.

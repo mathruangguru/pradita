@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { useAuth } from "../../hooks/useAuth";
 
 const Login = () => {
@@ -36,6 +37,10 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+      <Helmet>
+        <title>Admin Login | Bahan Ajar Pradita</title>
+      </Helmet>
+
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-6 shadow-sm"

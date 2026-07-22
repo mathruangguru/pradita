@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { ExternalLink, Plus, Pencil, Trash2 } from "lucide-react";
 import { linksService } from "../../services/linksService";
 
@@ -27,6 +28,10 @@ const LinksList = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Link Materi | Admin Bahan Ajar Pradita</title>
+      </Helmet>
+
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-900">Link Materi</h1>
         <Link

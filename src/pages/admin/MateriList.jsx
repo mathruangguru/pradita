@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   Folder,
   FileText,
@@ -91,6 +92,10 @@ const MateriList = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Materi | Admin Bahan Ajar Pradita</title>
+      </Helmet>
+
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-900">Materi</h1>
         <Link

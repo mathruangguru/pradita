@@ -1,1 +1,26 @@
 @import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+.prose-soal {
+  color: theme(colors.slate.700);
+  font-size: theme(fontSize.sm);
+  line-height: 1.6;
+}
+.prose-soal p {
+  margin: 0.5rem 0;
+}
+.prose-soal p:first-child {
+  margin-top: 0;
+}
+.prose-soal p:last-child {
+  margin-bottom: 0;
+}
+.prose-soal strong {
+  font-weight: 600;
+  color: theme(colors.slate.900);
+}
+.prose-soal .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0.75rem 0;
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Folder } from "lucide-react";
 import { materiService } from "../../services/materiService";
 
@@ -41,6 +42,10 @@ const Home = () => {
 
   return (
     <div className="space-y-10">
+      <Helmet>
+        <title>Bahan Ajar | Bahan Ajar Pradita</title>
+      </Helmet>
+
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Bahan Ajar</h1>
         <p className="mt-1 text-slate-500">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { siswaService } from "../../services/siswaService";
 
 const emptyForm = {
@@ -43,6 +44,10 @@ const SiswaForm = () => {
 
   return (
     <div className="max-w-xl">
+      <Helmet>
+        <title>{`${isEdit ? "Edit Siswa" : "Tambah Siswa"} | Admin Bahan Ajar Pradita`}</title>
+      </Helmet>
+
       <h1 className="text-2xl font-bold text-slate-900">
         {isEdit ? "Edit Siswa" : "Tambah Siswa"}
       </h1>

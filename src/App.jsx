@@ -10,6 +10,8 @@ import MateriList from "./pages/admin/MateriList";
 import MateriForm from "./pages/admin/MateriForm";
 import LinksList from "./pages/admin/LinksList";
 import LinksForm from "./pages/admin/LinksForm";
+import SoalList from "./pages/admin/SoalList";
+import SoalForm from "./pages/admin/SoalForm";
 import SiswaList from "./pages/admin/SiswaList";
 import SiswaForm from "./pages/admin/SiswaForm";
 
@@ -38,6 +40,9 @@ const App = () => {
         <Route path="links" element={<LinksList />} />
         <Route path="links/new" element={<LinksForm />} />
         <Route path="links/:id/edit" element={<LinksForm />} />
+        <Route path="soal" element={<SoalList />} />
+        <Route path="soal/new" element={<SoalForm />} />
+        <Route path="soal/:id/edit" element={<SoalForm />} />
         <Route path="siswa" element={<SiswaList />} />
         <Route path="siswa/new" element={<SiswaForm />} />
         <Route path="siswa/:id/edit" element={<SiswaForm />} />

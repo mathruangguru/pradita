@@ -2,53 +2,51 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { siswaService } from "../../services/siswaService";
+import { soalService } from "../../services/soalService";
 
-const AVATAR_TONES = [
-  "bg-blue-100 text-blue-900",
-  "bg-amber-100 text-amber-800",
-  "bg-slate-200 text-slate-700",
-];
+const LEVEL_TONES = {
+  LOTS: "bg-green-100 text-green-700",
+  MOTS: "bg-amber-100 text-amber-700",
+  HOTS: "bg-rose-100 text-rose-700",
+};
 
-const initials = (name = "") =>
-  name
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-
-const SiswaList = () => {
-  const [siswa, setSiswa] = useState([]);
+const SoalList = () => {
+  const [soal, setSoal] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = () =>
-    siswaService.list().then((rows) => setSiswa(rows.sort((a, b) => a.id - b.id)));
+    soalService.list().then((rows) =>
+      setSoal(
+        rows.sort(
+          (a, b) => a.materi_id - b.materi_id || a.nomor - b.nomor,
+        ),
+      ),
+    );
 
   useEffect(() => {
     refresh().then(() => setLoading(false));
   }, []);
 
   const handleDelete = async (id) => {
-    if (!confirm("Hapus siswa ini?")) return;
-    await siswaService.remove(id);
+    if (!confirm("Hapus soal ini?")) return;
+    await soalService.remove(id);
     refresh();
   };
 
   return (
     <div>
       <Helmet>
-        <title>Pengguna | Admin Bahan Ajar Pradita</title>
+        <title>Soal | Admin Bahan Ajar Pradita</title>
       </Helmet>
 
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Pengguna</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Soal</h1>
         <Link
-          to="/admin/siswa/new"
+          to="/admin/soal/new"
           className="flex items-center gap-1.5 rounded-lg bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-950"
         >
           <Plus className="h-4 w-4" />
-          Tambah Siswa
+          Tambah Soal
         </Link>
       </div>
 
@@ -56,60 +54,55 @@ const SiswaList = () => {
         <table className="w-full text-left text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-slate-500">
             <tr>
-              <th className="px-4 py-2.5 font-medium">Nama</th>
-              <th className="px-4 py-2.5 font-medium">Email</th>
-              <th className="px-4 py-2.5 font-medium">Status</th>
+              <th className="px-4 py-2.5 font-medium">Kode Bahan Ajar</th>
+              <th className="px-4 py-2.5 font-medium">No.</th>
+              <th className="px-4 py-2.5 font-medium">Subtopik</th>
+              <th className="px-4 py-2.5 font-medium">Level</th>
+              <th className="px-4 py-2.5 font-medium">Jawaban</th>
               <th className="px-4 py-2.5 font-medium">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {loading && (
               <tr>
-                <td className="px-4 py-3 text-slate-500" colSpan={4}>
+                <td className="px-4 py-3 text-slate-500" colSpan={6}>
                   Memuat...
                 </td>
               </tr>
             )}
-            {!loading && siswa.length === 0 && (
+            {!loading && soal.length === 0 && (
               <tr>
-                <td className="px-4 py-3 text-slate-500" colSpan={4}>
-                  Belum ada siswa.
+                <td className="px-4 py-3 text-slate-500" colSpan={6}>
+                  Belum ada soal.
                 </td>
               </tr>
             )}
-            {siswa.map((item, i) => (
+            {soal.map((item) => (
               <tr
                 key={item.id}
                 className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
               >
-                <td className="px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${AVATAR_TONES[i % AVATAR_TONES.length]}`}
-                    >
-                      {initials(item.nama)}
-                    </div>
-                    <span className="font-medium text-slate-800">
-                      {item.nama}
-                    </span>
-                  </div>
+                <td className="px-4 py-3 font-medium text-slate-800">
+                  {item.materi?.kode_bahan_ajar ?? "-"}
                 </td>
-                <td className="px-4 py-3 text-slate-600">{item.email}</td>
+                <td className="px-4 py-3 text-slate-600">{item.nomor}</td>
+                <td className="px-4 py-3 text-slate-600">
+                  {item.subtopik ?? "-"}
+                </td>
                 <td className="px-4 py-3">
                   <span
-                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                      item.status === "active"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-slate-200 text-slate-600"
-                    }`}
+                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${LEVEL_TONES[item.level_kognitif] ?? "bg-slate-100 text-slate-600"}`}
                   >
-                    {item.status}
+                    {item.level_kognitif ?? "-"}
                   </span>
+                </td>
+                <td className="px-4 py-3 uppercase text-slate-600">
+                  {item.jawaban_benar}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     <Link
-                      to={`/admin/siswa/${item.id}/edit`}
+                      to={`/admin/soal/${item.id}/edit`}
                       className="text-slate-400 hover:text-blue-900"
                       title="Edit"
                     >
@@ -133,4 +126,4 @@ const SiswaList = () => {
   );
 };
 
-export default SiswaList;
+export default SoalList;
