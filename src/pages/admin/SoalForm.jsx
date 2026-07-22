@@ -84,15 +84,15 @@ const SoalForm = () => {
         <title>{`${isEdit ? "Edit Soal" : "Tambah Soal"} | Admin Bahan Ajar Pradita`}</title>
       </Helmet>
 
-      <h1 className="text-2xl font-bold text-slate-900">
+      <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
         {isEdit ? "Edit Soal" : "Tambah Soal"}
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="mt-5 space-y-5 rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+        className="mt-5 space-y-5 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
       >
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <div>
             <label className="block text-sm font-medium text-slate-700">
               Materi
@@ -125,7 +125,7 @@ const SoalForm = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div>
             <label className="block text-sm font-medium text-slate-700">
               Topik
@@ -162,7 +162,7 @@ const SoalForm = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <div>
             <label className="block text-sm font-medium text-slate-700">
               Pertanyaan{" "}
@@ -192,7 +192,7 @@ const SoalForm = () => {
           </label>
           <div className="mt-2 space-y-2">
             {["a", "b", "c", "d", "e"].map((huruf) => (
-              <div key={huruf} className="grid grid-cols-2 gap-4">
+              <div key={huruf} className="grid grid-cols-1 gap-3 lg:grid-cols-2">
                 <div className="flex items-start gap-2">
                   <span className="mt-2 w-5 shrink-0 text-sm font-semibold uppercase text-slate-400">
                     {huruf}
@@ -228,7 +228,7 @@ const SoalForm = () => {
           </select>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <div>
             <label className="block text-sm font-medium text-slate-700">
               Pembahasan
@@ -249,7 +249,7 @@ const SoalForm = () => {
           </div>
         </div>
 
-        <div className="flex gap-3 pt-2">
+        <div className="flex flex-col gap-3 pt-2 sm:flex-row">
           <button
             type="submit"
             disabled={saving}

@@ -41,13 +41,13 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 md:flex">
       <aside
-        className={`flex flex-col border-r border-slate-200 bg-white transition-all ${
-          collapsed ? "w-20" : "w-64"
+        className={`fixed inset-x-0 bottom-0 z-20 flex border-t border-slate-200 bg-white shadow-lg md:static md:flex-col md:border-r md:border-t-0 md:shadow-none md:transition-all ${
+          collapsed ? "md:w-20" : "md:w-64"
         }`}
       >
-        <div className="flex items-center gap-2 p-4">
+        <div className="hidden items-center gap-2 p-4 md:flex">
           {!collapsed && (
             <div className="relative flex-1">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
@@ -71,7 +71,7 @@ const AdminLayout = () => {
           </button>
         </div>
 
-        <nav className="flex flex-1 flex-col gap-1 px-3">
+        <nav className="grid flex-1 grid-cols-5 gap-1 px-2 py-2 md:flex md:flex-col md:px-3 md:py-0">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -79,20 +79,24 @@ const AdminLayout = () => {
               end={item.end}
               title={collapsed ? item.label : undefined}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                `flex min-w-0 flex-col items-center justify-center gap-1 rounded-lg px-1.5 py-2 text-[11px] font-medium transition-colors md:flex-row md:gap-3 md:px-3 md:py-2.5 md:text-sm ${
                   isActive
                     ? "bg-blue-900 text-white"
                     : "text-slate-600 hover:bg-slate-100"
-                } ${collapsed ? "justify-center" : ""}`
+                } ${collapsed ? "md:justify-center" : "md:justify-start"}`
               }
             >
               <item.icon className="h-[18px] w-[18px] shrink-0" />
-              {!collapsed && item.label}
+              <span
+                className={`max-w-full truncate ${collapsed ? "md:hidden" : ""}`}
+              >
+                {item.label}
+              </span>
             </NavLink>
           ))}
         </nav>
 
-        <div className="border-t border-slate-200 p-3">
+        <div className="hidden border-t border-slate-200 p-3 md:block">
           <div
             className={`flex items-center gap-3 rounded-lg px-2 py-2 ${
               collapsed ? "justify-center" : ""
@@ -120,7 +124,7 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-x-hidden p-8">
+      <main className="min-w-0 flex-1 overflow-x-hidden px-4 pb-28 pt-5 sm:px-6 md:p-8">
         <Outlet />
       </main>
     </div>

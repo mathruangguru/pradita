@@ -41,13 +41,15 @@ const Home = () => {
   }
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8 sm:space-y-10">
       <Helmet>
         <title>Bahan Ajar | Bahan Ajar Pradita</title>
       </Helmet>
 
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Bahan Ajar</h1>
+        <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
+          Bahan Ajar
+        </h1>
         <p className="mt-1 text-slate-500">
           Kumpulan materi pembelajaran yang tersedia saat ini.
         </p>
@@ -61,7 +63,7 @@ const Home = () => {
             >
               <Folder className="h-3.5 w-3.5" />
             </div>
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+            <h2 className="min-w-0 text-sm font-semibold uppercase tracking-wide text-slate-400">
               {mataPelajaran}
             </h2>
           </div>
@@ -72,7 +74,7 @@ const Home = () => {
                 <Link
                   key={item.id}
                   to={`/materi/${item.id}`}
-                  className="flex items-stretch gap-4 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-300 hover:shadow-sm"
+                  className="flex items-stretch gap-3 rounded-xl border border-slate-200 bg-white p-3 transition hover:border-blue-300 hover:shadow-sm sm:gap-4 sm:p-4"
                 >
                   <div className="flex w-14 shrink-0 flex-col items-center justify-center text-center">
                     <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
@@ -82,7 +84,7 @@ const Home = () => {
                       {item.pertemuan}
                     </span>
                   </div>
-                  <div className="min-w-0 border-l border-slate-100 pl-4">
+                  <div className="min-w-0 border-l border-slate-100 pl-3 sm:pl-4">
                     <h3 className="font-medium text-slate-900">
                       {item.topik}
                     </h3>

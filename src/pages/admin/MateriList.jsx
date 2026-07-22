@@ -96,18 +96,20 @@ const MateriList = () => {
         <title>Materi | Admin Bahan Ajar Pradita</title>
       </Helmet>
 
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Materi</h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
+          Materi
+        </h1>
         <Link
           to="/admin/materi/new"
-          className="flex items-center gap-1.5 rounded-lg bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-950"
+          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-950 sm:w-auto"
         >
           <Plus className="h-4 w-4" />
           Tambah Materi
         </Link>
       </div>
 
-      <div className="mt-5 flex items-center gap-3">
+      <div className="mt-5 flex flex-wrap items-center gap-3">
         <div className="relative">
           <button
             onClick={() => {
@@ -188,7 +190,7 @@ const MateriList = () => {
       <h2 className="mt-8 mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
         Mata Pelajaran
       </h2>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         {folders.map((folder, i) => (
           <button
             key={folder.mataPelajaran}
@@ -221,7 +223,7 @@ const MateriList = () => {
       <h2 className="mt-8 mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
         Terbaru
       </h2>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
         {recent.map((item) => (
           <Link
             key={item.id}
@@ -246,8 +248,8 @@ const MateriList = () => {
       <h2 className="mt-8 mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
         Semua Materi
       </h2>
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-        <table className="w-full text-left text-sm">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+        <table className="min-w-[860px] text-left text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-slate-500">
             <tr>
               <th className="px-4 py-2.5 font-medium">Pertemuan</th>

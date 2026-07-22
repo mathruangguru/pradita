@@ -41,19 +41,21 @@ const SiswaList = () => {
         <title>Pengguna | Admin Bahan Ajar Pradita</title>
       </Helmet>
 
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Pengguna</h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
+          Pengguna
+        </h1>
         <Link
           to="/admin/siswa/new"
-          className="flex items-center gap-1.5 rounded-lg bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-950"
+          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-950 sm:w-auto"
         >
           <Plus className="h-4 w-4" />
           Tambah Siswa
         </Link>
       </div>
 
-      <div className="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
-        <table className="w-full text-left text-sm">
+      <div className="mt-5 overflow-x-auto rounded-xl border border-slate-200 bg-white">
+        <table className="min-w-[640px] text-left text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-slate-500">
             <tr>
               <th className="px-4 py-2.5 font-medium">Nama</th>

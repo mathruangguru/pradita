@@ -56,15 +56,15 @@ const MateriForm = () => {
         <title>{`${isEdit ? "Edit Materi" : "Tambah Materi"} | Admin Bahan Ajar Pradita`}</title>
       </Helmet>
 
-      <h1 className="text-2xl font-bold text-slate-900">
+      <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
         {isEdit ? "Edit Materi" : "Tambah Materi"}
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="mt-5 space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+        className="mt-5 space-y-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
       >
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className="block text-sm font-medium text-slate-700">
               Mata Pelajaran
@@ -116,7 +116,7 @@ const MateriForm = () => {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className="block text-sm font-medium text-slate-700">
               Kode Bahan Ajar
@@ -155,7 +155,7 @@ const MateriForm = () => {
           </select>
         </div>
 
-        <div className="flex gap-3 pt-2">
+        <div className="flex flex-col gap-3 pt-2 sm:flex-row">
           <button
             type="submit"
             disabled={saving}

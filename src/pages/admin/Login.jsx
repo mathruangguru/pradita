@@ -36,14 +36,14 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-8">
       <Helmet>
         <title>Admin Login | Bahan Ajar Pradita</title>
       </Helmet>
 
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+        className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
       >
         <h1 className="text-xl font-bold text-slate-900">Admin Login</h1>
         <p className="mt-1 text-sm text-slate-500">

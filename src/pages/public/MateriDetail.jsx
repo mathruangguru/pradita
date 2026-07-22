@@ -117,7 +117,7 @@ const MateriDetail = () => {
         Kembali
       </Link>
 
-      <div className="mt-5 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-900">
             <FileText className="h-4 w-4" />
@@ -130,14 +130,14 @@ const MateriDetail = () => {
           </span>
         </div>
 
-        <h1 className="mt-4 text-2xl font-bold text-slate-900">
+        <h1 className="mt-4 text-xl font-bold text-slate-900 sm:text-2xl">
           {materi.topik}
         </h1>
         <p className="mt-2 leading-relaxed text-slate-700">
           {materi.subtopik}
         </p>
 
-        <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-slate-100 pt-5 text-sm">
+        <dl className="mt-5 grid grid-cols-1 gap-4 border-t border-slate-100 pt-5 text-sm sm:grid-cols-2">
           <div>
             <dt className="text-slate-400">Kode Bahan Ajar</dt>
             <dd className="mt-0.5 font-medium text-slate-700">

@@ -42,16 +42,18 @@ const Dashboard = () => {
         <title>Dashboard | Admin Bahan Ajar Pradita</title>
       </Helmet>
 
-      <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+      <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
+        Dashboard
+      </h1>
       <p className="mt-1 text-sm text-slate-500">
         Ringkasan bahan ajar dan pengguna.
       </p>
 
-      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
         {cards.map((card) => (
           <div
             key={card.label}
-            className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+            className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
           >
             <div className={`inline-flex h-10 w-10 items-center justify-center rounded-lg ${card.tone}`}>
               <card.icon className="h-5 w-5" />
@@ -64,7 +66,7 @@ const Dashboard = () => {
         ))}
       </div>
 
-      <div className="mt-8 flex items-center justify-between">
+      <div className="mt-8 flex items-center justify-between gap-3">
         <h2 className="text-lg font-semibold text-slate-800">
           Materi Terbaru
         </h2>

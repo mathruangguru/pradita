@@ -48,13 +48,13 @@ const SiswaForm = () => {
         <title>{`${isEdit ? "Edit Siswa" : "Tambah Siswa"} | Admin Bahan Ajar Pradita`}</title>
       </Helmet>
 
-      <h1 className="text-2xl font-bold text-slate-900">
+      <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
         {isEdit ? "Edit Siswa" : "Tambah Siswa"}
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="mt-5 space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+        className="mt-5 space-y-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
       >
         <div>
           <label className="block text-sm font-medium text-slate-700">
@@ -95,7 +95,7 @@ const SiswaForm = () => {
           </select>
         </div>
 
-        <div className="flex gap-3 pt-2">
+        <div className="flex flex-col gap-3 pt-2 sm:flex-row">
           <button
             type="submit"
             disabled={saving}
