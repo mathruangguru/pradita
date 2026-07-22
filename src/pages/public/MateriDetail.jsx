@@ -1,14 +1,30 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, FileText } from "lucide-react";
+import { ArrowLeft, ExternalLink, FileText } from "lucide-react";
 import { materiService } from "../../services/materiService";
+import { linksService } from "../../services/linksService";
+
+const formatDate = (iso) =>
+  iso
+    ? new Date(iso).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : null;
 
 const MateriDetail = () => {
   const { id } = useParams();
   const [materi, setMateri] = useState(undefined);
+  const [links, setLinks] = useState([]);
 
   useEffect(() => {
-    materiService.get(id).then(setMateri);
+    materiService.get(id).then((row) => {
+      setMateri(row);
+      if (row) {
+        linksService.listByMateriId(row.id).then(setLinks);
+      }
+    });
   }, [id]);
 
   if (materi === undefined) {
@@ -46,15 +62,53 @@ const MateriDetail = () => {
             <FileText className="h-4 w-4" />
           </div>
           <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-950">
-            {materi.kategori}
+            {materi.mata_pelajaran}
+          </span>
+          <span className="text-xs text-slate-400">
+            Pertemuan {materi.pertemuan}
           </span>
         </div>
+
         <h1 className="mt-4 text-2xl font-bold text-slate-900">
-          {materi.judul}
+          {materi.topik}
         </h1>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          {materi.konten}
+        <p className="mt-2 leading-relaxed text-slate-700">
+          {materi.subtopik}
         </p>
+
+        <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-slate-100 pt-5 text-sm">
+          <div>
+            <dt className="text-slate-400">Kode Bahan Ajar</dt>
+            <dd className="mt-0.5 font-medium text-slate-700">
+              {materi.kode_bahan_ajar}
+            </dd>
+          </div>
+          {materi.penggunaan && (
+            <div>
+              <dt className="text-slate-400">Penggunaan</dt>
+              <dd className="mt-0.5 font-medium text-slate-700">
+                {formatDate(materi.penggunaan)}
+              </dd>
+            </div>
+          )}
+        </dl>
+
+        {links.length > 0 && (
+          <div className="mt-5 flex flex-wrap gap-3 border-t border-slate-100 pt-5">
+            {links.map((item) => (
+              <a
+                key={item.id}
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3.5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              >
+                Link {item.tipe.toUpperCase()}
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </article>
   );

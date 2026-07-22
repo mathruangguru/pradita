@@ -5,6 +5,7 @@ import {
   ChevronsRight,
   LayoutDashboard,
   BookOpen,
+  Link2,
   Users,
   LogOut,
   Search,
@@ -14,24 +15,26 @@ import { useAuth } from "../hooks/useAuth";
 const navItems = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/admin/materi", label: "Materi", icon: BookOpen },
-  { to: "/admin/users", label: "Pengguna", icon: Users },
+  { to: "/admin/links", label: "Link Materi", icon: Link2 },
+  { to: "/admin/siswa", label: "Pengguna", icon: Users },
 ];
 
-const initials = (name = "") =>
-  name
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
+const initials = (name = "") => {
+  const source = name.includes(" ")
+    ? name.split(" ").map((part) => part[0]).join("")
+    : name;
+  return source.slice(0, 2).toUpperCase();
+};
 
 const AdminLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
-  const handleLogout = () => {
-    logout();
+  const displayName = user?.user_metadata?.full_name || user?.email || "";
+
+  const handleLogout = async () => {
+    await logout();
     navigate("/admin/login", { replace: true });
   };
 
@@ -94,16 +97,14 @@ const AdminLayout = () => {
             }`}
           >
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-950">
-              {initials(user?.nama)}
+              {initials(displayName)}
             </div>
             {!collapsed && (
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-slate-800">
-                  {user?.nama}
+                  {displayName}
                 </p>
-                <p className="truncate text-xs text-slate-500">
-                  {user?.email}
-                </p>
+                <p className="truncate text-xs text-slate-500">Admin</p>
               </div>
             )}
             <button

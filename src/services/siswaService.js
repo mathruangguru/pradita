@@ -1,6 +1,6 @@
 import { supabase } from "../lib/supabaseClient";
 
-const TABLE = "materi";
+const TABLE = "siswa";
 
 const stripMeta = (fields) => {
   const payload = { ...fields };
@@ -10,7 +10,7 @@ const stripMeta = (fields) => {
   return payload;
 };
 
-export const materiService = {
+export const siswaService = {
   list: async () => {
     const { data, error } = await supabase.from(TABLE).select("*");
     if (error) throw error;

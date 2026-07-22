@@ -21,8 +21,8 @@ const Home = () => {
   }, []);
 
   const grouped = materi.reduce((acc, row) => {
-    acc[row.kategori] = acc[row.kategori] ?? [];
-    acc[row.kategori].push(row);
+    acc[row.mata_pelajaran] = acc[row.mata_pelajaran] ?? [];
+    acc[row.mata_pelajaran].push(row);
     return acc;
   }, {});
 
@@ -39,8 +39,8 @@ const Home = () => {
         </p>
       </div>
 
-      {Object.entries(grouped).map(([kategori, items], i) => (
-        <section key={kategori}>
+      {Object.entries(grouped).map(([mataPelajaran, items], i) => (
+        <section key={mataPelajaran}>
           <div className="mb-3 flex items-center gap-2">
             <div
               className={`flex h-7 w-7 items-center justify-center rounded-md ${FOLDER_TONES[i % FOLDER_TONES.length]}`}
@@ -48,27 +48,30 @@ const Home = () => {
               <Folder className="h-3.5 w-3.5" />
             </div>
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
-              {kategori}
+              {mataPelajaran}
             </h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {items
-              .sort((a, b) => a.urutan - b.urutan)
+              .sort((a, b) => a.pertemuan - b.pertemuan)
               .map((item) => (
                 <Link
-                  key={item.Id}
-                  to={`/materi/${item.Id}`}
+                  key={item.id}
+                  to={`/materi/${item.id}`}
                   className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-300 hover:shadow-sm"
                 >
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
                     <FileText className="h-4 w-4" />
                   </div>
                   <div className="min-w-0">
+                    <p className="text-xs font-medium text-slate-400">
+                      Pertemuan {item.pertemuan}
+                    </p>
                     <h3 className="font-medium text-slate-900">
-                      {item.judul}
+                      {item.topik}
                     </h3>
                     <p className="mt-1 text-sm text-slate-500">
-                      {item.deskripsi}
+                      {item.subtopik}
                     </p>
                   </div>
                 </Link>

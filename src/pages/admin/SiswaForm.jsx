@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { userService } from "../../services/userService";
+import { siswaService } from "../../services/siswaService";
 
 const emptyForm = {
   nama: "",
   email: "",
-  password: "",
-  role: "siswa",
   status: "active",
 };
 
-const UserForm = () => {
+const SiswaForm = () => {
   const { id } = useParams();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
@@ -20,7 +18,7 @@ const UserForm = () => {
 
   useEffect(() => {
     if (!isEdit) return;
-    userService.get(id).then((row) => {
+    siswaService.get(id).then((row) => {
       if (row) setForm(row);
       setLoading(false);
     });
@@ -33,12 +31,12 @@ const UserForm = () => {
     e.preventDefault();
     setSaving(true);
     if (isEdit) {
-      await userService.update(id, form);
+      await siswaService.update(id, form);
     } else {
-      await userService.create(form);
+      await siswaService.create(form);
     }
     setSaving(false);
-    navigate("/admin/users");
+    navigate("/admin/siswa");
   };
 
   if (loading) return <p className="text-slate-500">Memuat...</p>;
@@ -46,7 +44,7 @@ const UserForm = () => {
   return (
     <div className="max-w-xl">
       <h1 className="text-2xl font-bold text-slate-900">
-        {isEdit ? "Edit Pengguna" : "Tambah Pengguna"}
+        {isEdit ? "Edit Siswa" : "Tambah Siswa"}
       </h1>
 
       <form
@@ -80,45 +78,16 @@ const UserForm = () => {
 
         <div>
           <label className="block text-sm font-medium text-slate-700">
-            Password
+            Status
           </label>
-          <input
-            type="password"
-            required={!isEdit}
-            placeholder={isEdit ? "Kosongkan jika tidak diubah" : ""}
-            value={form.password}
-            onChange={handleChange("password")}
+          <select
+            value={form.status}
+            onChange={handleChange("status")}
             className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700">
-              Role
-            </label>
-            <select
-              value={form.role}
-              onChange={handleChange("role")}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            >
-              <option value="siswa">Siswa</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700">
-              Status
-            </label>
-            <select
-              value={form.status}
-              onChange={handleChange("status")}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
+          >
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
         </div>
 
         <div className="flex gap-3 pt-2">
@@ -131,7 +100,7 @@ const UserForm = () => {
           </button>
           <button
             type="button"
-            onClick={() => navigate("/admin/users")}
+            onClick={() => navigate("/admin/siswa")}
             className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50"
           >
             Batal
@@ -142,4 +111,4 @@ const UserForm = () => {
   );
 };
 
-export default UserForm;
+export default SiswaForm;

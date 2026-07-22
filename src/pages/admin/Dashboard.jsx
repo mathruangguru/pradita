@@ -2,24 +2,24 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BookOpen, CheckCircle2, FileEdit, Users, FileText } from "lucide-react";
 import { materiService } from "../../services/materiService";
-import { userService } from "../../services/userService";
+import { siswaService } from "../../services/siswaService";
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [recent, setRecent] = useState([]);
 
   useEffect(() => {
-    Promise.all([materiService.list(), userService.list()]).then(
-      ([materi, users]) => {
+    Promise.all([materiService.list(), siswaService.list()]).then(
+      ([materi, siswa]) => {
         setStats({
           totalMateri: materi.length,
           published: materi.filter((m) => m.status === "published").length,
           draft: materi.filter((m) => m.status === "draft").length,
-          totalUsers: users.length,
+          totalSiswa: siswa.length,
         });
         setRecent(
           [...materi]
-            .sort((a, b) => new Date(b.UpdatedAt) - new Date(a.UpdatedAt))
+            .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
             .slice(0, 4),
         );
       },
@@ -32,7 +32,7 @@ const Dashboard = () => {
     { label: "Total Materi", value: stats.totalMateri, icon: BookOpen, tone: "bg-blue-50 text-blue-900" },
     { label: "Published", value: stats.published, icon: CheckCircle2, tone: "bg-green-50 text-green-600" },
     { label: "Draft", value: stats.draft, icon: FileEdit, tone: "bg-amber-50 text-amber-600" },
-    { label: "Total Pengguna", value: stats.totalUsers, icon: Users, tone: "bg-slate-100 text-slate-600" },
+    { label: "Total Siswa", value: stats.totalSiswa, icon: Users, tone: "bg-slate-100 text-slate-600" },
   ];
 
   return (
@@ -74,18 +74,18 @@ const Dashboard = () => {
       <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {recent.map((item) => (
           <Link
-            key={item.Id}
-            to={`/admin/materi/${item.Id}/edit`}
+            key={item.id}
+            to={`/admin/materi/${item.id}/edit`}
             className="rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-300 hover:shadow-sm"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
               <FileText className="h-4 w-4" />
             </div>
             <p className="mt-3 truncate text-sm font-medium text-slate-800">
-              {item.judul}
+              {item.topik}
             </p>
             <p className="mt-0.5 text-xs text-slate-400">
-              {new Date(item.UpdatedAt).toLocaleDateString("id-ID", {
+              {new Date(item.updated_at).toLocaleDateString("id-ID", {
                 day: "numeric",
                 month: "short",
                 year: "numeric",

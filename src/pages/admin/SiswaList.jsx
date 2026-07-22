@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import { userService } from "../../services/userService";
+import { siswaService } from "../../services/siswaService";
 
 const AVATAR_TONES = [
   "bg-blue-100 text-blue-900",
@@ -17,20 +17,20 @@ const initials = (name = "") =>
     .join("")
     .toUpperCase();
 
-const UserList = () => {
-  const [users, setUsers] = useState([]);
+const SiswaList = () => {
+  const [siswa, setSiswa] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = () =>
-    userService.list().then((rows) => setUsers(rows.sort((a, b) => a.Id - b.Id)));
+    siswaService.list().then((rows) => setSiswa(rows.sort((a, b) => a.id - b.id)));
 
   useEffect(() => {
     refresh().then(() => setLoading(false));
   }, []);
 
   const handleDelete = async (id) => {
-    if (!confirm("Hapus pengguna ini?")) return;
-    await userService.remove(id);
+    if (!confirm("Hapus siswa ini?")) return;
+    await siswaService.remove(id);
     refresh();
   };
 
@@ -39,11 +39,11 @@ const UserList = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-900">Pengguna</h1>
         <Link
-          to="/admin/users/new"
+          to="/admin/siswa/new"
           className="flex items-center gap-1.5 rounded-lg bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-950"
         >
           <Plus className="h-4 w-4" />
-          Tambah Pengguna
+          Tambah Siswa
         </Link>
       </div>
 
@@ -53,7 +53,6 @@ const UserList = () => {
             <tr>
               <th className="px-4 py-2.5 font-medium">Nama</th>
               <th className="px-4 py-2.5 font-medium">Email</th>
-              <th className="px-4 py-2.5 font-medium">Role</th>
               <th className="px-4 py-2.5 font-medium">Status</th>
               <th className="px-4 py-2.5 font-medium">Aksi</th>
             </tr>
@@ -61,21 +60,21 @@ const UserList = () => {
           <tbody>
             {loading && (
               <tr>
-                <td className="px-4 py-3 text-slate-500" colSpan={5}>
+                <td className="px-4 py-3 text-slate-500" colSpan={4}>
                   Memuat...
                 </td>
               </tr>
             )}
-            {!loading && users.length === 0 && (
+            {!loading && siswa.length === 0 && (
               <tr>
-                <td className="px-4 py-3 text-slate-500" colSpan={5}>
-                  Belum ada pengguna.
+                <td className="px-4 py-3 text-slate-500" colSpan={4}>
+                  Belum ada siswa.
                 </td>
               </tr>
             )}
-            {users.map((item, i) => (
+            {siswa.map((item, i) => (
               <tr
-                key={item.Id}
+                key={item.id}
                 className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
               >
                 <td className="px-4 py-3">
@@ -91,9 +90,6 @@ const UserList = () => {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-slate-600">{item.email}</td>
-                <td className="px-4 py-3 text-slate-600 capitalize">
-                  {item.role}
-                </td>
                 <td className="px-4 py-3">
                   <span
                     className={`rounded-full px-2 py-0.5 text-xs font-medium ${
@@ -108,14 +104,14 @@ const UserList = () => {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     <Link
-                      to={`/admin/users/${item.Id}/edit`}
+                      to={`/admin/siswa/${item.id}/edit`}
                       className="text-slate-400 hover:text-blue-900"
                       title="Edit"
                     >
                       <Pencil className="h-4 w-4" />
                     </Link>
                     <button
-                      onClick={() => handleDelete(item.Id)}
+                      onClick={() => handleDelete(item.id)}
                       className="text-slate-400 hover:text-red-600"
                       title="Hapus"
                     >
@@ -132,4 +128,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default SiswaList;

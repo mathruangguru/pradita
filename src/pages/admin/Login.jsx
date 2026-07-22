@@ -3,13 +3,17 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 const Login = () => {
-  const { user, login } = useAuth();
+  const { user, loading, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  if (loading) {
+    return null;
+  }
 
   if (user) {
     return <Navigate to="/admin" replace />;
@@ -83,10 +87,6 @@ const Login = () => {
         >
           {submitting ? "Memproses..." : "Masuk"}
         </button>
-
-        <p className="mt-4 text-center text-xs text-slate-400">
-          Dummy akun: admin@pradita.ac.id / admin123
-        </p>
       </form>
     </div>
   );

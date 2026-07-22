@@ -26,20 +26,22 @@ const statusOptions = [
 
 const sortOptions = [
   { value: "latest", label: "Terbaru" },
-  { value: "judul", label: "Judul (A-Z)" },
+  { value: "pertemuan", label: "Pertemuan" },
 ];
 
 const formatDate = (iso) =>
-  new Date(iso).toLocaleDateString("id-ID", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+  iso
+    ? new Date(iso).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+    : "-";
 
 const MateriList = () => {
   const [materi, setMateri] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeKategori, setActiveKategori] = useState(null);
+  const [activeMataPelajaran, setActiveMataPelajaran] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("latest");
   const [filterOpen, setFilterOpen] = useState(false);
@@ -60,26 +62,29 @@ const MateriList = () => {
 
   const folders = Object.values(
     materi.reduce((acc, item) => {
-      acc[item.kategori] = acc[item.kategori] ?? {
-        kategori: item.kategori,
+      acc[item.mata_pelajaran] = acc[item.mata_pelajaran] ?? {
+        mataPelajaran: item.mata_pelajaran,
         count: 0,
       };
-      acc[item.kategori].count += 1;
+      acc[item.mata_pelajaran].count += 1;
       return acc;
     }, {}),
   );
 
   const recent = [...materi]
-    .sort((a, b) => new Date(b.UpdatedAt) - new Date(a.UpdatedAt))
+    .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
     .slice(0, 3);
 
   const filtered = materi
-    .filter((item) => !activeKategori || item.kategori === activeKategori)
+    .filter(
+      (item) =>
+        !activeMataPelajaran || item.mata_pelajaran === activeMataPelajaran,
+    )
     .filter((item) => statusFilter === "all" || item.status === statusFilter)
     .sort((a, b) =>
-      sortBy === "judul"
-        ? a.judul.localeCompare(b.judul)
-        : new Date(b.UpdatedAt) - new Date(a.UpdatedAt),
+      sortBy === "pertemuan"
+        ? a.pertemuan - b.pertemuan
+        : new Date(b.updated_at) - new Date(a.updated_at),
     );
 
   if (loading) return <p className="text-slate-500">Memuat...</p>;
@@ -164,31 +169,33 @@ const MateriList = () => {
           )}
         </div>
 
-        {activeKategori && (
+        {activeMataPelajaran && (
           <button
-            onClick={() => setActiveKategori(null)}
+            onClick={() => setActiveMataPelajaran(null)}
             className="flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-2 text-sm font-medium text-amber-800"
           >
-            {activeKategori}
+            {activeMataPelajaran}
             <X className="h-3.5 w-3.5" />
           </button>
         )}
       </div>
 
       <h2 className="mt-8 mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
-        Kategori
+        Mata Pelajaran
       </h2>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {folders.map((folder, i) => (
           <button
-            key={folder.kategori}
+            key={folder.mataPelajaran}
             onClick={() =>
-              setActiveKategori(
-                activeKategori === folder.kategori ? null : folder.kategori,
+              setActiveMataPelajaran(
+                activeMataPelajaran === folder.mataPelajaran
+                  ? null
+                  : folder.mataPelajaran,
               )
             }
             className={`rounded-xl border bg-white p-4 text-left transition hover:shadow-sm ${
-              activeKategori === folder.kategori
+              activeMataPelajaran === folder.mataPelajaran
                 ? "border-amber-400 ring-1 ring-amber-400"
                 : "border-slate-200 hover:border-slate-300"
             }`}
@@ -199,7 +206,7 @@ const MateriList = () => {
               <Folder className="h-5 w-5" />
             </div>
             <p className="mt-3 font-medium text-slate-800">
-              {folder.kategori}
+              {folder.mataPelajaran}
             </p>
             <p className="text-sm text-slate-400">{folder.count} Materi</p>
           </button>
@@ -212,8 +219,8 @@ const MateriList = () => {
       <div className="grid gap-4 sm:grid-cols-3">
         {recent.map((item) => (
           <Link
-            key={item.Id}
-            to={`/admin/materi/${item.Id}/edit`}
+            key={item.id}
+            to={`/admin/materi/${item.id}/edit`}
             className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-300 hover:shadow-sm"
           >
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
@@ -221,10 +228,10 @@ const MateriList = () => {
             </div>
             <div className="min-w-0">
               <p className="truncate font-medium text-slate-800">
-                {item.judul}
+                {item.topik}
               </p>
               <p className="text-xs text-slate-400">
-                {formatDate(item.UpdatedAt)}
+                Pertemuan {item.pertemuan}
               </p>
             </div>
           </Link>
@@ -238,35 +245,49 @@ const MateriList = () => {
         <table className="w-full text-left text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-slate-500">
             <tr>
-              <th className="px-4 py-2.5 font-medium">Judul</th>
-              <th className="px-4 py-2.5 font-medium">Kategori</th>
+              <th className="px-4 py-2.5 font-medium">Pertemuan</th>
+              <th className="px-4 py-2.5 font-medium">Topik</th>
+              <th className="px-4 py-2.5 font-medium">Mata Pelajaran</th>
+              <th className="px-4 py-2.5 font-medium">Penggunaan</th>
               <th className="px-4 py-2.5 font-medium">Status</th>
-              <th className="px-4 py-2.5 font-medium">Diperbarui</th>
               <th className="px-4 py-2.5 font-medium">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 && (
               <tr>
-                <td className="px-4 py-3 text-slate-500" colSpan={5}>
+                <td className="px-4 py-3 text-slate-500" colSpan={6}>
                   Tidak ada materi yang cocok.
                 </td>
               </tr>
             )}
             {filtered.map((item) => (
               <tr
-                key={item.Id}
+                key={item.id}
                 className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
               >
+                <td className="px-4 py-3 text-slate-600">
+                  {item.pertemuan}
+                </td>
                 <td className="px-4 py-3">
-                  <div className="flex items-center gap-2.5">
-                    <FileText className="h-4 w-4 shrink-0 text-slate-400" />
-                    <span className="font-medium text-slate-800">
-                      {item.judul}
-                    </span>
+                  <div className="flex items-start gap-2.5">
+                    <FileText className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+                    <div>
+                      <p className="font-medium text-slate-800">
+                        {item.topik}
+                      </p>
+                      <p className="text-xs text-slate-400">
+                        {item.subtopik}
+                      </p>
+                    </div>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-slate-600">{item.kategori}</td>
+                <td className="px-4 py-3 text-slate-600">
+                  {item.mata_pelajaran}
+                </td>
+                <td className="px-4 py-3 text-slate-500">
+                  {formatDate(item.penggunaan)}
+                </td>
                 <td className="px-4 py-3">
                   <span
                     className={`rounded-full px-2 py-0.5 text-xs font-medium ${
@@ -278,20 +299,17 @@ const MateriList = () => {
                     {item.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-slate-500">
-                  {formatDate(item.UpdatedAt)}
-                </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     <Link
-                      to={`/admin/materi/${item.Id}/edit`}
+                      to={`/admin/materi/${item.id}/edit`}
                       className="text-slate-400 hover:text-blue-900"
                       title="Edit"
                     >
                       <Pencil className="h-4 w-4" />
                     </Link>
                     <button
-                      onClick={() => handleDelete(item.Id)}
+                      onClick={() => handleDelete(item.id)}
                       className="text-slate-400 hover:text-red-600"
                       title="Hapus"
                     >

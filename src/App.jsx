@@ -8,8 +8,10 @@ import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import MateriList from "./pages/admin/MateriList";
 import MateriForm from "./pages/admin/MateriForm";
-import UserList from "./pages/admin/UserList";
-import UserForm from "./pages/admin/UserForm";
+import LinksList from "./pages/admin/LinksList";
+import LinksForm from "./pages/admin/LinksForm";
+import SiswaList from "./pages/admin/SiswaList";
+import SiswaForm from "./pages/admin/SiswaForm";
 
 const App = () => {
   return (
@@ -33,9 +35,12 @@ const App = () => {
         <Route path="materi" element={<MateriList />} />
         <Route path="materi/new" element={<MateriForm />} />
         <Route path="materi/:id/edit" element={<MateriForm />} />
-        <Route path="users" element={<UserList />} />
-        <Route path="users/new" element={<UserForm />} />
-        <Route path="users/:id/edit" element={<UserForm />} />
+        <Route path="links" element={<LinksList />} />
+        <Route path="links/new" element={<LinksForm />} />
+        <Route path="links/:id/edit" element={<LinksForm />} />
+        <Route path="siswa" element={<SiswaList />} />
+        <Route path="siswa/new" element={<SiswaForm />} />
+        <Route path="siswa/:id/edit" element={<SiswaForm />} />
       </Route>
     </Routes>
   );

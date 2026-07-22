@@ -1,18 +1,30 @@
 import { supabase } from "../lib/supabaseClient";
 
-const TABLE = "materi";
+const TABLE = "links";
 
 const stripMeta = (fields) => {
   const payload = { ...fields };
   delete payload.id;
   delete payload.created_at;
   delete payload.updated_at;
+  delete payload.materi;
   return payload;
 };
 
-export const materiService = {
+export const linksService = {
   list: async () => {
-    const { data, error } = await supabase.from(TABLE).select("*");
+    const { data, error } = await supabase
+      .from(TABLE)
+      .select("*, materi(id, kode_bahan_ajar, topik)");
+    if (error) throw error;
+    return data;
+  },
+
+  listByMateriId: async (materiId) => {
+    const { data, error } = await supabase
+      .from(TABLE)
+      .select("*")
+      .eq("materi_id", materiId);
     if (error) throw error;
     return data;
   },

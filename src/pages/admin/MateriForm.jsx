@@ -3,11 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { materiService } from "../../services/materiService";
 
 const emptyForm = {
-  judul: "",
-  kategori: "",
-  deskripsi: "",
-  konten: "",
-  urutan: 1,
+  mata_pelajaran: "",
+  pertemuan: 1,
+  topik: "",
+  subtopik: "",
+  kode_bahan_ajar: "",
+  penggunaan: "",
   status: "draft",
 };
 
@@ -22,23 +23,25 @@ const MateriForm = () => {
   useEffect(() => {
     if (!isEdit) return;
     materiService.get(id).then((row) => {
-      if (row) setForm(row);
+      if (row) setForm({ ...row, penggunaan: row.penggunaan ?? "" });
       setLoading(false);
     });
   }, [id, isEdit]);
 
   const handleChange = (field) => (e) => {
-    const value = field === "urutan" ? Number(e.target.value) : e.target.value;
+    const value =
+      field === "pertemuan" ? Number(e.target.value) : e.target.value;
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
+    const payload = { ...form, penggunaan: form.penggunaan || null };
     if (isEdit) {
-      await materiService.update(id, form);
+      await materiService.update(id, payload);
     } else {
-      await materiService.create(form);
+      await materiService.create(payload);
     }
     setSaving(false);
     navigate("/admin/materi");
@@ -56,51 +59,54 @@ const MateriForm = () => {
         onSubmit={handleSubmit}
         className="mt-5 space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
       >
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700">
+              Mata Pelajaran
+            </label>
+            <input
+              required
+              value={form.mata_pelajaran}
+              onChange={handleChange("mata_pelajaran")}
+              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700">
+              Pertemuan
+            </label>
+            <input
+              type="number"
+              min={1}
+              required
+              value={form.pertemuan}
+              onChange={handleChange("pertemuan")}
+              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-slate-700">
-            Judul
+            Topik
           </label>
           <input
             required
-            value={form.judul}
-            onChange={handleChange("judul")}
+            value={form.topik}
+            onChange={handleChange("topik")}
+            placeholder="[TKA] Transformasi Fungsi"
             className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-slate-700">
-            Kategori
+            Subtopik
           </label>
           <input
             required
-            value={form.kategori}
-            onChange={handleChange("kategori")}
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-700">
-            Deskripsi Singkat
-          </label>
-          <input
-            required
-            value={form.deskripsi}
-            onChange={handleChange("deskripsi")}
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-700">
-            Konten
-          </label>
-          <textarea
-            required
-            rows={5}
-            value={form.konten}
-            onChange={handleChange("konten")}
+            value={form.subtopik}
+            onChange={handleChange("subtopik")}
             className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
@@ -108,29 +114,40 @@ const MateriForm = () => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700">
-              Urutan
+              Kode Bahan Ajar
             </label>
             <input
-              type="number"
-              min={1}
-              value={form.urutan}
-              onChange={handleChange("urutan")}
+              required
+              value={form.kode_bahan_ajar}
+              onChange={handleChange("kode_bahan_ajar")}
               className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700">
-              Status
+              Penggunaan
             </label>
-            <select
-              value={form.status}
-              onChange={handleChange("status")}
+            <input
+              type="date"
+              value={form.penggunaan}
+              onChange={handleChange("penggunaan")}
               className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
+            />
           </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700">
+            Status
+          </label>
+          <select
+            value={form.status}
+            onChange={handleChange("status")}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          >
+            <option value="draft">Draft</option>
+            <option value="published">Published</option>
+          </select>
         </div>
 
         <div className="flex gap-3 pt-2">
