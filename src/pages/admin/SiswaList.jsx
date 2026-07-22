@@ -54,8 +54,8 @@ const SiswaList = () => {
         </Link>
       </div>
 
-      <div className="mt-5 overflow-x-auto rounded-xl border border-slate-200 bg-white">
-        <table className="min-w-[640px] text-left text-sm">
+      <div className="mt-5 hidden rounded-xl border border-slate-200 bg-white sm:block">
+        <table className="w-full text-left text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-slate-500">
             <tr>
               <th className="px-4 py-2.5 font-medium">Nama</th>
@@ -130,6 +130,67 @@ const SiswaList = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="mt-5 space-y-3 sm:hidden">
+        {loading && (
+          <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-500">
+            Memuat...
+          </p>
+        )}
+        {!loading && siswa.length === 0 && (
+          <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-500">
+            Belum ada siswa.
+          </p>
+        )}
+        {siswa.map((item, i) => (
+          <div
+            key={item.id}
+            className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+          >
+            <div className="flex items-start gap-3">
+              <div
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${AVATAR_TONES[i % AVATAR_TONES.length]}`}
+              >
+                {initials(item.nama)}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-medium text-slate-800">{item.nama}</p>
+                    <p className="mt-1 truncate text-sm text-slate-500">
+                      {item.email}
+                    </p>
+                  </div>
+                  <span
+                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
+                      item.status === "active"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-slate-200 text-slate-600"
+                    }`}
+                  >
+                    {item.status}
+                  </span>
+                </div>
+                <div className="mt-4 flex items-center gap-4 border-t border-slate-100 pt-3">
+                  <Link
+                    to={`/admin/siswa/${item.id}/edit`}
+                    className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-blue-900"
+                  >
+                    <Pencil className="h-4 w-4" />
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-red-600"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Hapus
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -45,8 +45,8 @@ const LinksList = () => {
         </Link>
       </div>
 
-      <div className="mt-5 overflow-x-auto rounded-xl border border-slate-200 bg-white">
-        <table className="min-w-[760px] text-left text-sm">
+      <div className="mt-5 hidden rounded-xl border border-slate-200 bg-white sm:block">
+        <table className="w-full text-left text-sm">
           <thead className="border-b border-slate-200 bg-slate-50 text-slate-500">
             <tr>
               <th className="px-4 py-2.5 font-medium">Kode Bahan Ajar</th>
@@ -122,6 +122,65 @@ const LinksList = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="mt-5 space-y-3 sm:hidden">
+        {loading && (
+          <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-500">
+            Memuat...
+          </p>
+        )}
+        {!loading && links.length === 0 && (
+          <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-500">
+            Belum ada link.
+          </p>
+        )}
+        {links.map((item) => (
+          <div
+            key={item.id}
+            className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="font-medium text-slate-800">
+                  {item.materi?.kode_bahan_ajar ?? "-"}
+                </p>
+                <p className="mt-1 text-sm text-slate-600">
+                  {item.materi?.topik ?? "-"}
+                </p>
+              </div>
+              <span
+                className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium uppercase ${TIPE_TONES[item.tipe] ?? "bg-slate-100 text-slate-600"}`}
+              >
+                {item.tipe}
+              </span>
+            </div>
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 flex min-w-0 items-center gap-1 text-sm text-slate-500 hover:text-blue-900"
+            >
+              <span className="truncate">{item.link}</span>
+              <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+            </a>
+            <div className="mt-4 flex items-center gap-4 border-t border-slate-100 pt-3">
+              <Link
+                to={`/admin/links/${item.id}/edit`}
+                className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-blue-900"
+              >
+                <Pencil className="h-4 w-4" />
+                Edit
+              </Link>
+              <button
+                onClick={() => handleDelete(item.id)}
+                className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-red-600"
+              >
+                <Trash2 className="h-4 w-4" />
+                Hapus
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
