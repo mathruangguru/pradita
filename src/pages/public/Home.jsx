@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FileText, Folder } from "lucide-react";
+import { Folder } from "lucide-react";
 import { materiService } from "../../services/materiService";
 
 const FOLDER_TONES = [
@@ -8,6 +8,15 @@ const FOLDER_TONES = [
   "bg-amber-50 text-amber-700",
   "bg-slate-200 text-slate-700",
 ];
+
+const formatDate = (iso) =>
+  iso
+    ? new Date(iso).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+    : null;
 
 const Home = () => {
   const [materi, setMateri] = useState([]);
@@ -58,21 +67,28 @@ const Home = () => {
                 <Link
                   key={item.id}
                   to={`/materi/${item.id}`}
-                  className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-300 hover:shadow-sm"
+                  className="flex items-stretch gap-4 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-300 hover:shadow-sm"
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
-                    <FileText className="h-4 w-4" />
+                  <div className="flex w-14 shrink-0 flex-col items-center justify-center text-center">
+                    <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+                      Pertemuan
+                    </span>
+                    <span className="text-2xl font-bold text-slate-900">
+                      {item.pertemuan}
+                    </span>
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-xs font-medium text-slate-400">
-                      Pertemuan {item.pertemuan}
-                    </p>
+                  <div className="min-w-0 border-l border-slate-100 pl-4">
                     <h3 className="font-medium text-slate-900">
                       {item.topik}
                     </h3>
                     <p className="mt-1 text-sm text-slate-500">
                       {item.subtopik}
                     </p>
+                    {item.penggunaan && (
+                      <p className="mt-2 text-xs text-slate-400">
+                        {formatDate(item.penggunaan)}
+                      </p>
+                    )}
                   </div>
                 </Link>
               ))}
