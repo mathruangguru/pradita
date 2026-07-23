@@ -2,15 +2,20 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
-const normalizeMathSubscripts = (source) =>
-  source.replace(/(\$\$|\$)([\s\S]*?)\1/g, (match, delimiter, math) => {
-    const normalized = math.replace(
-      /(?<![\\A-Za-z])([A-Za-z])([0-9]+)(?![A-Za-z])/g,
-      "$1_{$2}",
-    );
+const normalizeSimpleSubscripts = (math) =>
+  math.replace(/(?<![\\A-Za-z_])([A-Za-z])([0-9]+)(?![A-Za-z])/g, "$1_{$2}");
 
-    return `${delimiter}${normalized}${delimiter}`;
-  });
+const normalizeMathSubscripts = (source) =>
+  source
+    .replace(/(\$\$|\$)([\s\S]*?)\1/g, (match, delimiter, math) => {
+      return `${delimiter}${normalizeSimpleSubscripts(math)}${delimiter}`;
+    })
+    .replace(/\\\(([\s\S]*?)\\\)/g, (match, math) => {
+      return `$${normalizeSimpleSubscripts(math)}$`;
+    })
+    .replace(/\\\[([\s\S]*?)\\\]/g, (match, math) => {
+      return `$$${normalizeSimpleSubscripts(math)}$$`;
+    });
 
 const MarkdownLatex = ({ children, className = "" }) => {
   if (!children) return null;
