@@ -50,6 +50,15 @@ export const soalService = {
     return data;
   },
 
+  createMany: async (rows) => {
+    const { data, error } = await supabase
+      .from(TABLE)
+      .insert(rows.map(stripMeta))
+      .select();
+    if (error) throw error;
+    return data;
+  },
+
   update: async (id, fields) => {
     const { data, error } = await supabase
       .from(TABLE)

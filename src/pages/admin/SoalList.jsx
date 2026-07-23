@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Upload, Plus, Pencil, Trash2 } from "lucide-react";
 import { soalService } from "../../services/soalService";
 
 const LEVEL_TONES = {
@@ -41,13 +41,22 @@ const SoalList = () => {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Soal</h1>
-        <Link
-          to="/admin/soal/new"
-          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-950 sm:w-auto"
-        >
-          <Plus className="h-4 w-4" />
-          Tambah Soal
-        </Link>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Link
+            to="/admin/soal/import"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 sm:w-auto"
+          >
+            <Upload className="h-4 w-4" />
+            Import Bulk
+          </Link>
+          <Link
+            to="/admin/soal/new"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-950 sm:w-auto"
+          >
+            <Plus className="h-4 w-4" />
+            Tambah Soal
+          </Link>
+        </div>
       </div>
 
       <div className="mt-5 hidden rounded-xl border border-slate-200 bg-white sm:block">
