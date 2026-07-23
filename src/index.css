@@ -30,8 +30,11 @@ body {
 .prose-soal .katex .mpunct {
   font-weight: 400;
 }
-.prose-soal .katex .msupsub {
-  font-size: 0.9em;
+.prose-soal .katex .katex-sizing.reset-size6.size3 {
+  font-size: 0.62em;
+}
+.prose-soal .katex .msupsub .vlist {
+  transform: translateY(0.04em);
 }
 .prose-soal p {
   margin: 0.5rem 0;
