@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { Folder } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Folder } from "lucide-react";
 import { materiService } from "../../services/materiService";
+
+const PAGE_SIZE = 6;
 
 const FOLDER_TONES = [
   "bg-blue-50 text-blue-900",
@@ -27,6 +29,8 @@ const getDateOnly = (value) => {
 const Home = () => {
   const [materi, setMateri] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openGroups, setOpenGroups] = useState({});
+  const [groupPages, setGroupPages] = useState({});
 
   useEffect(() => {
     materiService.list().then((rows) => {
@@ -40,6 +44,12 @@ const Home = () => {
     acc[row.mata_pelajaran].push(row);
     return acc;
   }, {});
+  const groupedEntries = Object.entries(grouped).map(
+    ([mataPelajaran, items]) => [
+      mataPelajaran,
+      [...items].sort((a, b) => a.pertemuan - b.pertemuan),
+    ],
+  );
   const today = getDateOnly();
   const weekStart = new Date(today);
   const weekEnd = new Date(today);
@@ -53,6 +63,17 @@ const Home = () => {
       return penggunaan >= weekStart && penggunaan <= weekEnd;
     })
     .sort((a, b) => new Date(a.penggunaan) - new Date(b.penggunaan));
+
+  const setGroupPage = (mataPelajaran, page) => {
+    setGroupPages((prev) => ({ ...prev, [mataPelajaran]: page }));
+  };
+
+  const toggleGroup = (mataPelajaran) => {
+    setOpenGroups((prev) => ({
+      ...prev,
+      [mataPelajaran]: !(prev[mataPelajaran] ?? true),
+    }));
+  };
 
   if (loading) {
     return <p className="text-slate-500">Memuat bahan ajar...</p>;
@@ -104,7 +125,7 @@ const Home = () => {
                     {item.subtopik}
                   </p>
                   <p className="mt-2 text-xs text-cyan-700">
-                    {formatDate(item.penggunaan)}
+                    {item.mata_pelajaran} · {formatDate(item.penggunaan)}
                   </p>
                 </div>
               </Link>
@@ -117,22 +138,44 @@ const Home = () => {
         )}
       </section>
 
-      {Object.entries(grouped).map(([mataPelajaran, items], i) => (
-        <section key={mataPelajaran}>
-          <div className="mb-3 flex items-center gap-2">
-            <div
-              className={`flex h-7 w-7 items-center justify-center rounded-md ${FOLDER_TONES[i % FOLDER_TONES.length]}`}
+      {groupedEntries.map(([mataPelajaran, items], i) => {
+        const isOpen = openGroups[mataPelajaran] ?? true;
+        const currentPage = groupPages[mataPelajaran] ?? 0;
+        const totalPages = Math.ceil(items.length / PAGE_SIZE);
+        const currentItems = items.slice(
+          currentPage * PAGE_SIZE,
+          currentPage * PAGE_SIZE + PAGE_SIZE,
+        );
+
+        return (
+          <section key={mataPelajaran}>
+            <button
+              type="button"
+              onClick={() => toggleGroup(mataPelajaran)}
+              className="mb-3 flex w-full items-center gap-2 text-left"
             >
-              <Folder className="h-3.5 w-3.5" />
-            </div>
-            <h2 className="min-w-0 text-sm font-semibold uppercase tracking-wide text-slate-400">
-              {mataPelajaran}
-            </h2>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {items
-              .sort((a, b) => a.pertemuan - b.pertemuan)
-              .map((item) => (
+              <div
+                className={`flex h-7 w-7 items-center justify-center rounded-md ${FOLDER_TONES[i % FOLDER_TONES.length]}`}
+              >
+                <Folder className="h-3.5 w-3.5" />
+              </div>
+              <h2 className="min-w-0 text-sm font-semibold uppercase tracking-wide text-slate-400">
+                {mataPelajaran}
+              </h2>
+              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500">
+                {items.length}
+              </span>
+              <ChevronDown
+                className={`ml-auto h-4 w-4 text-slate-400 transition ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {isOpen && (
+              <>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {currentItems.map((item) => (
                 <Link
                   key={item.id}
                   to={`/materi/${item.id}`}
@@ -160,10 +203,49 @@ const Home = () => {
                     )}
                   </div>
                 </Link>
-              ))}
-          </div>
-        </section>
-      ))}
+                  ))}
+                </div>
+
+                {totalPages > 1 && (
+                  <div className="mt-4 flex items-center justify-between gap-3">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setGroupPage(
+                          mataPelajaran,
+                          Math.max(currentPage - 1, 0),
+                        )
+                      }
+                      disabled={currentPage === 0}
+                      className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 disabled:opacity-40"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      Sebelumnya
+                    </button>
+                    <span className="text-sm text-slate-500">
+                      {currentPage + 1} / {totalPages}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setGroupPage(
+                          mataPelajaran,
+                          Math.min(currentPage + 1, totalPages - 1),
+                        )
+                      }
+                      disabled={currentPage === totalPages - 1}
+                      className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 disabled:opacity-40"
+                    >
+                      Berikutnya
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </section>
+        );
+      })}
 
       {materi.length === 0 && (
         <p className="text-slate-500">Belum ada bahan ajar yang tersedia.</p>
