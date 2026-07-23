@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
+import rehypeMathjax from "rehype-mathjax/svg";
 
 const normalizeSimpleSubscripts = (math) =>
   math.replace(/(?<![\\A-Za-z_])([A-Za-z])([0-9]+)(?![A-Za-z])/g, "$1_{$2}");
@@ -22,7 +22,7 @@ const MarkdownLatex = ({ children, className = "" }) => {
 
   return (
     <div className={`prose-soal ${className}`}>
-      <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+      <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeMathjax]}>
         {normalizeMathSubscripts(children)}
       </ReactMarkdown>
     </div>
