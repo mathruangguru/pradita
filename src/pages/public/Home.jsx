@@ -26,6 +26,18 @@ const getDateOnly = (value) => {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 };
 
+const orderItemsByColumn = (items) => {
+  const midpoint = Math.ceil(items.length / 2);
+  const ordered = [];
+
+  for (let i = 0; i < midpoint; i += 1) {
+    ordered.push(items[i]);
+    if (items[i + midpoint]) ordered.push(items[i + midpoint]);
+  }
+
+  return ordered;
+};
+
 const Home = () => {
   const [materi, setMateri] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -146,6 +158,7 @@ const Home = () => {
           currentPage * PAGE_SIZE,
           currentPage * PAGE_SIZE + PAGE_SIZE,
         );
+        const displayedItems = orderItemsByColumn(currentItems);
 
         return (
           <section key={mataPelajaran}>
@@ -174,8 +187,39 @@ const Home = () => {
 
             {isOpen && (
               <>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-4 sm:hidden">
                   {currentItems.map((item) => (
+                <Link
+                  key={item.id}
+                  to={`/materi/${item.id}`}
+                  className="flex items-stretch gap-3 rounded-xl border border-slate-200 bg-white p-3 transition hover:border-blue-300 hover:shadow-sm sm:gap-4 sm:p-4"
+                >
+                  <div className="flex w-14 shrink-0 flex-col items-center justify-center text-center">
+                    <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+                      Pertemuan
+                    </span>
+                    <span className="text-2xl font-bold text-slate-900">
+                      {item.pertemuan}
+                    </span>
+                  </div>
+                  <div className="min-w-0 border-l border-slate-100 pl-3 sm:pl-4">
+                    <h3 className="font-medium text-slate-900">
+                      {item.topik}
+                    </h3>
+                    <p className="mt-1 text-sm text-slate-500">
+                      {item.subtopik}
+                    </p>
+                    {item.penggunaan && (
+                      <p className="mt-2 text-xs text-slate-400">
+                        {formatDate(item.penggunaan)}
+                      </p>
+                    )}
+                  </div>
+                </Link>
+                  ))}
+                </div>
+                <div className="hidden gap-4 sm:grid sm:grid-cols-2">
+                  {displayedItems.map((item) => (
                 <Link
                   key={item.id}
                   to={`/materi/${item.id}`}
