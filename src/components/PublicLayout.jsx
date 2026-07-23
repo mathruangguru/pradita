@@ -1,5 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
-import { GraduationCap, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
+import ruangguruLogo from "../assets/ruangguru-logo.png";
 
 const PublicLayout = () => {
   return (
@@ -7,9 +8,11 @@ const PublicLayout = () => {
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
           <Link to="/" className="flex min-w-0 items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-900 text-white">
-              <GraduationCap className="h-4.5 w-4.5" />
-            </div>
+            <img
+              src={ruangguruLogo}
+              alt="ruangguru"
+              className="h-7 w-auto shrink-0"
+            />
             <span className="truncate text-base font-semibold text-slate-900 sm:text-lg">
               Bahan Ajar Pradita
             </span>

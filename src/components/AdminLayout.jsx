@@ -12,6 +12,7 @@ import {
   Search,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import ruangguruLogo from "../assets/ruangguru-logo.png";
 
 const navItems = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -47,6 +48,18 @@ const AdminLayout = () => {
           collapsed ? "md:w-20" : "md:w-64"
         }`}
       >
+        <div
+          className={`hidden items-center border-b border-slate-100 p-4 md:flex ${
+            collapsed ? "justify-center" : "justify-start"
+          }`}
+        >
+          {collapsed ? (
+            <span className="text-xl font-bold text-[#28b6c2]">rg</span>
+          ) : (
+            <img src={ruangguruLogo} alt="ruangguru" className="h-8 w-auto" />
+          )}
+        </div>
+
         <div className="hidden items-center gap-2 p-4 md:flex">
           {!collapsed && (
             <div className="relative flex-1">
