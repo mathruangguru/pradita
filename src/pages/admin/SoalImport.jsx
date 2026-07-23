@@ -21,6 +21,22 @@ const sampleJson = `[
     "pilihan_e": "...",
     "jawaban_benar": "a",
     "pembahasan": "..."
+  },
+  {
+    "nomor": 2,
+    "topik": "Persamaan",
+    "subtopik": "Akar Real",
+    "level_kognitif": "MOTS",
+    "pertanyaan": "Nilai x bilangan real yang memenuhi $x^{33}-x=0$ adalah ....",
+    "pilihan": {
+      "a": "-1",
+      "b": "0",
+      "c": "1",
+      "d": "-2",
+      "e": "2"
+    },
+    "jawaban_benar": ["a", "b", "c"],
+    "pembahasan": "$x^{33}-x=x(x^{32}-1)=0$, sehingga $x=-1,0,1$."
   }
 ]`;
 
@@ -39,6 +55,21 @@ const getRows = (value) => {
   throw new Error("JSON harus berupa array, atau object dengan field soal/questions.");
 };
 
+const normalizeAnswers = (answers) => {
+  const values = Array.isArray(answers)
+    ? answers
+    : answers
+        .toString()
+        .split(",")
+        .map((answer) => answer.trim());
+
+  return [
+    ...new Set(values.map((answer) => answer.toString().trim().toLowerCase())),
+  ]
+    .filter(Boolean)
+    .join(",");
+};
+
 const normalizeRows = (value, fallbackMateriId) =>
   getRows(value).map((row, index) => ({
     materi_id: Number(row.materi_id || fallbackMateriId),
@@ -52,13 +83,9 @@ const normalizeRows = (value, fallbackMateriId) =>
     pilihan_c: getOption(row, "c"),
     pilihan_d: getOption(row, "d"),
     pilihan_e: getOption(row, "e"),
-    jawaban_benar: Array.isArray(row.jawaban_benar ?? row.jawaban ?? row.answer)
-      ? (row.jawaban_benar ?? row.jawaban ?? row.answer)
-          .map((answer) => answer.toString().trim().toLowerCase())
-          .join(",")
-      : (row.jawaban_benar ?? row.jawaban ?? row.answer ?? "a")
-          .toString()
-          .toLowerCase(),
+    jawaban_benar: normalizeAnswers(
+      row.jawaban_benar ?? row.jawaban ?? row.answer ?? "a",
+    ),
     pembahasan: row.pembahasan ?? row.explanation ?? "",
   }));
 
@@ -173,6 +200,11 @@ const SoalImport = () => {
             onChange={(e) => setJsonText(e.target.value)}
             className={`${inputClass} font-mono`}
           />
+          <p className="mt-2 text-xs text-slate-500">
+            Untuk multi-jawaban, isi <code>jawaban_benar</code> dengan array
+            seperti <code>["a", "b", "c"]</code> atau string koma seperti{" "}
+            <code>"a,b,c"</code>.
+          </p>
         </div>
         {error && (
           <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
