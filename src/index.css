@@ -15,6 +15,24 @@ body {
   font-size: theme(fontSize.sm);
   line-height: 1.6;
 }
+.prose-soal .katex {
+  color: theme(colors.slate.800);
+  font-size: 1.04em;
+  font-weight: 400;
+  line-height: 1.25;
+}
+.prose-soal .katex .mord,
+.prose-soal .katex .mop,
+.prose-soal .katex .mbin,
+.prose-soal .katex .mrel,
+.prose-soal .katex .mopen,
+.prose-soal .katex .mclose,
+.prose-soal .katex .mpunct {
+  font-weight: 400;
+}
+.prose-soal .katex .msupsub {
+  font-size: 0.9em;
+}
 .prose-soal p {
   margin: 0.5rem 0;
 }
@@ -32,4 +50,7 @@ body {
   overflow-x: auto;
   overflow-y: hidden;
   margin: 0.75rem 0;
+}
+.prose-soal .katex-display > .katex {
+  font-size: 1.08em;
 }
