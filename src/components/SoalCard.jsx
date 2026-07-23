@@ -10,8 +10,16 @@ const LEVEL_TONES = {
 
 const OPTIONS = ["a", "b", "c", "d", "e"];
 
+const getCorrectAnswers = (soal) =>
+  (soal.jawaban_benar ?? "")
+    .split(",")
+    .map((answer) => answer.trim().toLowerCase())
+    .filter(Boolean);
+
 const SoalCard = ({ soal }) => {
   const [showPembahasan, setShowPembahasan] = useState(false);
+  const correctAnswers = getCorrectAnswers(soal);
+  const isMultiAnswer = correctAnswers.length > 1;
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-5">
@@ -24,6 +32,11 @@ const SoalCard = ({ soal }) => {
             className={`rounded-full px-2 py-0.5 text-xs font-medium ${LEVEL_TONES[soal.level_kognitif] ?? "bg-slate-100 text-slate-600"}`}
           >
             {soal.level_kognitif}
+          </span>
+        )}
+        {isMultiAnswer && (
+          <span className="rounded-full bg-cyan-50 px-2 py-0.5 text-xs font-medium text-cyan-700">
+            Multi-jawaban
           </span>
         )}
         {soal.subtopik && (
@@ -39,7 +52,7 @@ const SoalCard = ({ soal }) => {
         {OPTIONS.map((huruf) => (
           <div key={huruf} className="flex gap-2">
             <span className="shrink-0 text-sm font-medium uppercase text-slate-500">
-              {huruf}.
+              {isMultiAnswer ? "□" : `${huruf}.`}
             </span>
             <MarkdownLatex className="flex-1">
               {soal[`pilihan_${huruf}`]}
@@ -63,7 +76,7 @@ const SoalCard = ({ soal }) => {
       {showPembahasan && (
         <div className="mt-3 rounded-lg bg-slate-50 p-4">
           <p className="text-sm font-semibold text-green-700">
-            Jawaban benar: {soal.jawaban_benar.toUpperCase()}
+            Jawaban benar: {correctAnswers.join(", ").toUpperCase()}
           </p>
           <div className="mt-2">
             <MarkdownLatex>{soal.pembahasan}</MarkdownLatex>

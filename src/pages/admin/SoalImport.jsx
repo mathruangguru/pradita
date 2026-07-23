@@ -52,9 +52,13 @@ const normalizeRows = (value, fallbackMateriId) =>
     pilihan_c: getOption(row, "c"),
     pilihan_d: getOption(row, "d"),
     pilihan_e: getOption(row, "e"),
-    jawaban_benar: (row.jawaban_benar ?? row.jawaban ?? row.answer ?? "a")
-      .toString()
-      .toLowerCase(),
+    jawaban_benar: Array.isArray(row.jawaban_benar ?? row.jawaban ?? row.answer)
+      ? (row.jawaban_benar ?? row.jawaban ?? row.answer)
+          .map((answer) => answer.toString().trim().toLowerCase())
+          .join(",")
+      : (row.jawaban_benar ?? row.jawaban ?? row.answer ?? "a")
+          .toString()
+          .toLowerCase(),
     pembahasan: row.pembahasan ?? row.explanation ?? "",
   }));
 
@@ -72,8 +76,17 @@ const validateRows = (rows) => {
         throw new Error(`Baris ${index + 1}: pilihan_${key} wajib diisi.`);
       }
     });
-    if (!["a", "b", "c", "d", "e"].includes(row.jawaban_benar)) {
-      throw new Error(`Baris ${index + 1}: jawaban_benar harus a, b, c, d, atau e.`);
+    const answers = row.jawaban_benar
+      .split(",")
+      .map((answer) => answer.trim())
+      .filter(Boolean);
+    if (
+      answers.length === 0 ||
+      answers.some((answer) => !["a", "b", "c", "d", "e"].includes(answer))
+    ) {
+      throw new Error(
+        `Baris ${index + 1}: jawaban_benar harus a, b, c, d, e, atau kombinasi seperti a,c,e.`,
+      );
     }
   });
 };

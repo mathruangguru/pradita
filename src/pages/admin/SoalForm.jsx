@@ -18,6 +18,7 @@ const emptyForm = {
   pilihan_d: "",
   pilihan_e: "",
   jawaban_benar: "a",
+  is_multi_answer: false,
   pembahasan: "",
 };
 
@@ -48,7 +49,10 @@ const SoalForm = () => {
         [...materi].sort((a, b) => a.kode_bahan_ajar.localeCompare(b.kode_bahan_ajar)),
       );
       if (row) {
-        setForm(row);
+        setForm({
+          ...row,
+          is_multi_answer: (row.jawaban_benar ?? "").includes(","),
+        });
       } else if (materi.length > 0) {
         setForm((prev) => ({ ...prev, materi_id: materi[0].id }));
       }
@@ -60,17 +64,21 @@ const SoalForm = () => {
     const value =
       field === "materi_id" || field === "nomor"
         ? Number(e.target.value)
-        : e.target.value;
+        : field === "is_multi_answer"
+          ? e.target.checked
+          : e.target.value;
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
+    const payload = { ...form };
+    delete payload.is_multi_answer;
     if (isEdit) {
-      await soalService.update(id, form);
+      await soalService.update(id, payload);
     } else {
-      await soalService.create(form);
+      await soalService.create(payload);
     }
     setSaving(false);
     navigate("/admin/soal");
@@ -211,21 +219,41 @@ const SoalForm = () => {
           </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-700">
-            Jawaban Benar
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <label className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700">
+            <input
+              type="checkbox"
+              checked={form.is_multi_answer}
+              onChange={handleChange("is_multi_answer")}
+              className="h-4 w-4 rounded border-slate-300"
+            />
+            Bisa memilih lebih dari 1 jawaban
           </label>
-          <select
-            value={form.jawaban_benar}
-            onChange={handleChange("jawaban_benar")}
-            className={`${inputClass} max-w-[120px] uppercase`}
-          >
-            <option value="a">A</option>
-            <option value="b">B</option>
-            <option value="c">C</option>
-            <option value="d">D</option>
-            <option value="e">E</option>
-          </select>
+          <div>
+            <label className="block text-sm font-medium text-slate-700">
+              Jawaban Benar
+            </label>
+            {form.is_multi_answer ? (
+              <input
+                value={form.jawaban_benar}
+                onChange={handleChange("jawaban_benar")}
+                placeholder="a,c,e"
+                className={`${inputClass} uppercase`}
+              />
+            ) : (
+              <select
+                value={form.jawaban_benar}
+                onChange={handleChange("jawaban_benar")}
+                className={`${inputClass} uppercase`}
+              >
+                <option value="a">A</option>
+                <option value="b">B</option>
+                <option value="c">C</option>
+                <option value="d">D</option>
+                <option value="e">E</option>
+              </select>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
