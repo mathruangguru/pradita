@@ -16,11 +16,22 @@ body {
 }
 .prose-soal mjx-container[jax="SVG"] {
   color: theme(colors.slate.800);
-  font-size: 1.02em;
+  font-size: 1em;
   max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   vertical-align: -0.08em;
+}
+.prose-soal .math-source,
+.prose-soal code.language-math {
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+}
+.prose-soal .math-source-display {
+  display: block;
 }
 .prose-soal p {
   margin: 0.5rem 0;
