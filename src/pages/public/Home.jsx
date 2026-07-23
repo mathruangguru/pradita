@@ -123,12 +123,15 @@ const Home = () => {
                 to={`/materi/${item.id}`}
                 className="flex items-stretch gap-3 rounded-xl border border-cyan-100 bg-white p-3 transition hover:border-cyan-300 hover:shadow-sm sm:gap-4 sm:p-4"
               >
-                <div className="flex w-14 shrink-0 flex-col items-center justify-center text-center">
+                <div className="flex w-24 shrink-0 flex-col items-center justify-center text-center">
                   <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
                     Pertemuan
                   </span>
                   <span className="text-2xl font-bold text-slate-900">
                     {item.pertemuan}
+                  </span>
+                  <span className="mt-2 max-w-full rounded-full bg-cyan-50 px-2 py-0.5 text-[11px] font-medium text-cyan-700">
+                    {item.mata_pelajaran}
                   </span>
                 </div>
                 <div className="min-w-0 border-l border-slate-100 pl-3 sm:pl-4">
@@ -137,7 +140,7 @@ const Home = () => {
                     {item.subtopik}
                   </p>
                   <p className="mt-2 text-xs text-cyan-700">
-                    {item.mata_pelajaran} · {formatDate(item.penggunaan)}
+                    {formatDate(item.penggunaan)}
                   </p>
                 </div>
               </Link>
